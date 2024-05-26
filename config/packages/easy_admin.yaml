@@ -1,0 +1,10 @@
+easy_admin:
+  entities:
+    Dog:
+      class: App\Entity\Dog
+      form:
+        fields:
+          - { property: 'name', type: 'text' }
+          - { property: 'age', type: 'number' }
+        actions:
+          - { name: 'submit', label: 'Create Dog', type: 'submit' }

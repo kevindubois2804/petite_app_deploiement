@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}An error occurred
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="alert alert-warning" role="alert">
+			<h4 class="alert-heading">An error occurred</h4>
+			<p>{{ exception.message }}</p>
+			<hr>
+			<p class="mb-0">Please contact the administrator if you believe this is an error.</p>
+		</div>
+	</div>
+{% endblock %}

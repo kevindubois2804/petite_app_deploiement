@@ -1,0 +1,11 @@
+<p>Bonjour
+	{{ user.email }}!</p>
+
+<p>Merci de vous êtes inscrit sur le site. Veuillez s'il vous plait confirmer votre adresse email en cliquant sur le lien suivant :</p>
+
+<p>
+	<a href="{{ signedUrl }}">Confirmer mon adresse email</a>
+</p>
+
+<p>Ce lien expirera dans
+	{{ expiresAtMessageKey|trans(expiresAtMessageData) }}.</p>

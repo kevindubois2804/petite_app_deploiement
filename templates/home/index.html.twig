@@ -1,0 +1,31 @@
+{# templates/home/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Home
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<h1 class="mb-4">Liste des Dogues Allemands</h1>
+		<div class="row">
+			{% for dog in dogs %}
+				<div class="col-md-4">
+					<div class="card mb-4">
+						<img src="/images/dogs/{{ dog.imageUrl }}" class="card-img-top" alt="{{ dog.name }}">
+						<div class="card-body">
+							<h5 class="card-title">{{ dog.name }}</h5>
+							<p class="card-text">{{ dog.description }}</p>
+							<p class="card-text">
+								<small class="text-muted">Âge:
+									{{ dog.age }}
+									ans</small>
+							</p>
+							<a href="{{ path('app_dog', {name: dog.name}) }}" class="btn btn-primary">Voir
+								{{ dog.name }}</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}
