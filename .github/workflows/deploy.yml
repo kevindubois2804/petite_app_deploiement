@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Documentation du projet
 
 on:
   push:
@@ -13,12 +13,12 @@ jobs:
       mysql:
         image: mysql:8.0
       ports:
-        - '${MYSQL_PORT}:3306'
+        - '3308:3306'
       environment:
-        MYSQL_DATABASE: ${MYSQL_DB}
-        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_DATABASE: ${{ MYSQL_DATABASE }}
+        MYSQL_USER: $ {{MYSQL_USER}}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-          options: >-
+          options: 
             --health-cmd="pg_isready"
             --health-interval=10s
             --health-timeout=5s
@@ -52,7 +52,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: postgres://db_user:12345@127.0.0.1:5440/great_danes
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
@@ -70,12 +70,12 @@ jobs:
       mysql:
         image: mysql:8.0
       ports:
-        - '${MYSQL_PORT}:3306'
+        - '3308:3306'
       environment:
         MYSQL_DATABASE: ${MYSQL_DB}
         MYSQL_USER: ${MYSQL_USER}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-          options: >-
+          options: 
             --health-cmd="pg_isready"
             --health-interval=10s
             --health-timeout=5s
@@ -99,7 +99,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: postgres://db_user:12345@127.0.0.1:5440/great_danes
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=prod
 
