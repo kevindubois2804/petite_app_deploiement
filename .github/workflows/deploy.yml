@@ -15,6 +15,7 @@ jobs:
         ports:
           - 3308:3306
         env:
+          MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: great_danes
           MYSQL_USER: db_user
           MYSQL_PASSWORD: 12345
@@ -54,7 +55,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
+          DATABASE_URL: mysql://root:secret@127.0.0.1:3308/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
@@ -74,6 +75,7 @@ jobs:
         ports:
           - 3308:3306
         env:
+          MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: great_danes
           MYSQL_USER: db_user
           MYSQL_PASSWORD: 12345
@@ -100,7 +102,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
+          DATABASE_URL: mysql://root:secret@127.0.0.1:3308/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=prod
 
