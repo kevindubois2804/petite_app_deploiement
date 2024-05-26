@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 3306:3306
+          - 3308:3306
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: great_danes
@@ -22,7 +22,7 @@ jobs:
         options: --health-cmd "mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=20
+          --health-retries=5
 
     steps:
       - name: Checkout code
@@ -47,12 +47,15 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Wait for MySQL to initialize
+        run: sleep 15 # Adding a delay
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3306/great_danes
+          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
@@ -70,7 +73,7 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 3306:3306
+          - 3308:3306
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: great_danes
@@ -79,7 +82,7 @@ jobs:
         options: --health-cmd "mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=20
+          --health-retries=5
 
     steps:
       - name: Checkout code
@@ -99,7 +102,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3306/great_danes
+          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=prod
 
