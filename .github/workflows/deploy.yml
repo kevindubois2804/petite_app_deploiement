@@ -16,8 +16,8 @@ jobs:
           - '3306:3306'
         env:
           MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: great_danes
-          MYSQL_USER: db_user
+          MYSQL_DATABASE: danes
+          MYSQL_USER: toto
           MYSQL_PASSWORD: 12345
         options: --health-cmd "mysqladmin ping"
           --health-interval=10s
@@ -47,15 +47,12 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Wait for MySQL to initialize
-        run: sleep 15 # Adding a delay
-
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3306/great_danes
+          DATABASE_URL: 'mysql://toto:12345@127.0.0.1:3306/danes'
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
