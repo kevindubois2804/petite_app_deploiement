@@ -13,12 +13,12 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - '3308:3306'
+          - 3308:3306
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: great_danes
+          MYSQL_USER: db_user
+          MYSQL_PASSWORD: 12345
         options: --health-cmd "mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
@@ -32,7 +32,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
-          extensions: mbstring, intl, pdo, pdo_mysql
+          extensions: mbstring, intl, pdo, pdo_mysql, mysqli
           coverage: none
 
       - name: Get composer cache directory
@@ -52,7 +52,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
@@ -70,12 +70,12 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - '3308:3306'
+          - 3308:3306
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: great_danes
+          MYSQL_USER: db_user
+          MYSQL_PASSWORD: 12345
         options: --health-cmd "mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
@@ -89,7 +89,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
-          extensions: mbstring, intl, pdo, pdo_mysql
+          extensions: mbstring, intl, pdo, pdo_mysql, mysqli
           coverage: none
 
       - name: Install dependencies
@@ -99,7 +99,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=prod
 
