@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 3308:3306
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: great_danes
@@ -52,7 +52,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
+          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3306/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
@@ -70,7 +70,7 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 3308:3306
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: great_danes
@@ -99,7 +99,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3308/great_danes
+          DATABASE_URL: mysql://db_user:12345@127.0.0.1:3306/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=prod
 
