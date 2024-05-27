@@ -1,25 +1,25 @@
-name: Documentation du projet
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - master
+      - dev
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     services:
-      db:
-        image: mysql:8.0
+      postgres:
+        image: postgres:14
         ports:
-          - 3306:3306
+          - 5440:5432
         env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: danes
-          MYSQL_USER: toto
-          MYSQL_PASSWORD: 12345
-        options: --health-cmd "mysqladmin ping"
+          POSTGRES_DB: great_danes
+          POSTGRES_USER: db_user
+          POSTGRES_PASSWORD: 12345
+        options: >-
+          --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -32,7 +32,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
-          extensions: mbstring, intl, pdo, pdo_mysql, mysqli
+          extensions: mbstring, intl, pdo, pdo_pgsql
           coverage: none
 
       - name: Get composer cache directory
@@ -52,7 +52,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://root:secret@127.0.0.1:3306/danes
+          DATABASE_URL: postgres://db_user:12345@127.0.0.1:5440/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
@@ -67,16 +67,16 @@ jobs:
     needs: test
 
     services:
-      mysql:
-        image: mysql:8.0
+      postgres:
+        image: postgres:14
         ports:
-          - 3306:3306
+          - 5440:5432
         env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: great_danes
-          MYSQL_USER: db_user
-          MYSQL_PASSWORD: 12345
-        options: --health-cmd "mysqladmin ping"
+          POSTGRES_DB: great_danes
+          POSTGRES_USER: db_user
+          POSTGRES_PASSWORD: 12345
+        options: >-
+          --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -89,7 +89,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
-          extensions: mbstring, intl, pdo, pdo_mysql, mysqli
+          extensions: mbstring, intl, pdo, pdo_pgsql
           coverage: none
 
       - name: Install dependencies
@@ -99,7 +99,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: mysql://db_user:12345@mysql:3306/great_danes
+          DATABASE_URL: postgres://db_user:12345@127.0.0.1:5440/great_danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=prod
 
