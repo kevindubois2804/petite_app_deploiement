@@ -9,35 +9,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      DB_DATABASE: danes
-      DB_USER: toto
-      DB_PASSWORD: 12345
-
-    # services:
-    #   db:
-    #     image: mysql:8.0
-    #     ports:
-    #       - '3306:3306'
-    #     env:
-    #       MYSQL_ROOT_PASSWORD: secret
-    #       MYSQL_DATABASE: danes
-    #       MYSQL_USER: toto
-    #       MYSQL_PASSWORD: 12345
-    #     options: --health-cmd "mysqladmin ping"
-    #       --health-interval=10s
-    #       --health-timeout=5s
-    #       --health-retries=5
+    services:
+      db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: danes
+          MYSQL_USER: toto
+          MYSQL_PASSWORD: 12345
+        options: --health-cmd "mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Start MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
-      # Add more steps for testing and other tasks
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -62,7 +52,7 @@ jobs:
 
       - name: Set up database
         env:
-          DATABASE_URL: 'mysql://toto:12345@localhost:3306/danes'
+          DATABASE_URL: mysql://root:secret@127.0.0.1:3306/danes
         run: |
           php bin/console doctrine:database:create --if-not-exists --env=test
 
@@ -79,8 +69,8 @@ jobs:
     services:
       mysql:
         image: mysql:8.0
-        # ports:
-        #   - 3308:3306
+        ports:
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: great_danes
